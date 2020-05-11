@@ -30,7 +30,7 @@ def signup():
         filename = 'check.jpeg'
         with open(filename, 'wb') as f:
             f.write(imgdata)
-        status = backend_signup(request.form['userID'], 'check3.jpg')	
+        status = backend_signup(request.form['userID'], 'check.jpg')
         return jsonify(status=status)
     return render_template('signup.html')
 	
@@ -42,7 +42,7 @@ def login():
         filename = 'check.jpeg'
         with open(filename, 'wb') as f:
             f.write(imgdata)
-        res = backend_login('check3.jpg')
+        res = backend_login('check.jpg')
         if(res == None):
             return jsonify(status='1')
         return jsonify(status='0', user=res)
