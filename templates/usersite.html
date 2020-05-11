@@ -15,7 +15,7 @@
         </div>
         <br><br>
         <div id="uploadsection">
-            <form action = "http://localhost:5000/upload" method = "post" enctype="multipart/form-data">  
+            <form method = "post" enctype="multipart/form-data" id="form2">  
                 <input type="file" name="file">  
                 <input type = "submit" value="Upload">  
             </form>
@@ -37,6 +37,13 @@
                 var formData = new FormData(form);
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.open("POST", "/download");
+				xmlhttp.send(formData);
+            }
+            function upload(){
+                var form = document.getElementById("form2");
+                var formData = new FormData(form);
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "/upload");
 				xmlhttp.send(formData);
             }
         </script>
