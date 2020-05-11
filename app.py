@@ -25,6 +25,8 @@ def index(name=None):
 def signup():
     if request.method == 'POST':
         print("Current New User:", request.form['userID'])
+        if(request.form['userID'] in known_face_names):
+            return jsonify(status='4')
         str=request.form['file'][23:]
         imgdata = base64.b64decode(str)
         filename = 'check.jpeg'
