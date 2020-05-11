@@ -1,11 +1,12 @@
 from flask import *
-import face_recognition  #Python Library for Face Recognition System
+import face_recognition
 import cv2
 import os
 import base64
 from Crypto import Random
 import time
 import string
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
@@ -52,17 +53,27 @@ def login():
     
 @app.route('/getAllFiles', methods=['GET','POST'])
 def get_all_files():
+    files = []
     for (_,_,f) in os.walk(userpath):
         for file in f:
             files.append(file)
     return render_template('usersite.html',files=files)
     
 @app.route('/download', methods=['GET','POST'])
-def sendfile():
+def download():
     if request.method == 'POST':
         f=request.form['fname']
-    print(f)
-    return redirect(request.url)
+    files = []
+    get_all_files()
+    return render_template('usersite.html',files=files)
+    
+    
+@app.route('/upload', methods=['GET','POST'])  
+def upload():  
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save(secure_filename(f.filename))
+    return redirect(url_for('get_all_files'))
 
 def contains_whitespace(str):
     for i in str:
