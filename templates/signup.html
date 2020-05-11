@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Signup | DigiLocker</title>
+</head>
+<body>
+	
+    <form method="POST" enctype="multipart/form-data" id="myForm">
+		<label for="username">enter userID:</label>
+		<input type="text" id="username" name="userID" placeholder="  without space .." required>
+		<input type="button" value="Next" onclick="upload()">
+	</form>
+	<br><br>
+	<div id="my_camera"></div>
+	<div id="results"></div>
+	
+	<script type="text/javascript" src="static/webcam.js"></script>
+	
+	<script language="JavaScript">
+		function ShowCam() {
+			Webcam.set({
+				width: 640,
+				height: 480,
+				image_format: 'jpeg',
+				jpeg_quality: 100
+			});
+			Webcam.attach('#my_camera');
+		}
+		window.onload= ShowCam;
+
+		function snap() {
+			Webcam.snap( function(data_uri) {
+				// display results in page
+				document.getElementById('results').innerHTML = 
+				'<img id="image" src="'+data_uri+'"/>';
+			  } );      
+		}
+
+
+		function upload() {
+			//time=setInterval(function(){
+				snap();
+				var image = document.getElementById('image').src;
+				var form = document.getElementById('myForm');
+				var formData = new FormData(form);
+				formData.append("file", image);
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						var responseJson = JSON.parse(this.responseText);
+						if(responseJson.status == '0')
+						{
+							console.log('signup successful');
+							//load next page
+						}
+					}
+				};
+				xmlhttp.open("POST", "/signup");
+				xmlhttp.onload = upload;
+				xmlhttp.send(formData);
+				console.log(formData.get('file'));
+				console.log(formData.get('userID'));
+			//},100000);
+		}
+	</script>
+</body>
+</html>

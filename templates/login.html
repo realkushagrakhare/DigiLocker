@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Log In | DigiLocker</title>
+</head>
+<body>
+    <div id="my_camera"></div>
+    <br>
+    <form method="POST" enctype="multipart/form-data" id="myForm">
+		<input type="button" value="Recognize" onclick="upload()">
+    </form>
+    <br>
+    <div id="results"></div>
+    
+	
+	<script type="text/javascript" src="static/webcam.js"></script>
+	
+	<script language="JavaScript">
+		function ShowCam() {
+			Webcam.set({
+				width: 640,
+				height: 480,
+				image_format: 'jpeg',
+				jpeg_quality: 100
+			});
+			Webcam.attach('#my_camera');
+		}
+		window.onload= ShowCam;
+
+		function snap() {
+			Webcam.snap( function(data_uri) {
+				// display results in page
+				document.getElementById('results').innerHTML = 
+				'<img id="image" src="'+data_uri+'"/>';
+			  } );      
+		}
+
+
+		function upload() {
+			//time=setInterval(function(){
+				snap();
+				var image = document.getElementById('image').src;
+				var formData = new FormData();
+				formData.append("file", image);
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					if (this.readyState == 4 && this.status == 200) {
+						var responseJson = JSON.parse(this.responseText);
+						if(responseJson.status == '0')
+						{
+							sessionStorage.setItem('user', responseJson.user);
+							console.log(sessionStorage.getItem('user'));
+							//load next page
+						}
+					}
+				};
+				xmlhttp.open("POST", "/login");
+				xmlhttp.onload = upload;
+				xmlhttp.send(formData);
+			//},1000);
+		}
+	</script>
+</body>
+</html>

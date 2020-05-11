@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Site | DigiLocker</title>
+</head>
+    <body>
+        <div id="download-section">
+            <form method="POST" enctype="multipart/form-data" id="form1">
+                <select id="filelist" name="fname">
+                    <option>Dropdown for a list of files to select from</option>
+                </select>
+                <input type="button" value="Download now" onclick="download()">
+            </form>
+        </div>
+        <br><br>
+        <div id="uploadsection">
+            <form id="form2">
+                <input type="file" name="file">
+                <input type = "submit" value="Upload">
+            </form>
+        </div>
+
+        <script>
+            var select = document.getElementById("filelist");
+            var options = {{ files|tojson }};
+            for(var i = 0; i < options.length; i++) {
+                var opt = options[i];
+                var el = document.createElement("option");
+                el.textContent = opt;
+                el.value = opt;
+                select.appendChild(el);
+            }
+            
+            function download(){
+                var form = document.getElementById("form1");
+                var formData = new FormData(form);
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "/download");
+				xmlhttp.send(formData);
+            
+            }
+        </script>
+    </body>
+</html>
