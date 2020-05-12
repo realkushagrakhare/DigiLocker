@@ -59,21 +59,20 @@ def get_all_files():
             files.append(file)
     return render_template('usersite.html',files=files)
     
-@app.route('/download', methods=['GET','POST'])
+@app.route('/download', methods=['POST'])
 def download():
-    if request.method == 'POST':
-        f=request.form['fname']
-    files = []
-    get_all_files()
-    return render_template('usersite.html',files=files)
+    f=request.form['fname']
+    print(f)
+    return send_from_directory(directory=os.getcwd()+'\\'+'abc', filename=f)
     
     
-@app.route('/upload', methods=['GET','POST'])  
+@app.route('/upload', methods=['POST'])  
 def upload():  
     if request.method == 'POST':
+        print(request.files)
         f = request.files['file']
-        f.save(secure_filename(f.filename))
-    return redirect(url_for('get_all_files'))
+        f.save('abc'+'/'+secure_filename(f.filename))
+    return jsonify(status='0')
 
 def contains_whitespace(str):
     for i in str:
@@ -196,6 +195,7 @@ def backend_login(image_path):
 
 if __name__ == '__main__':
     reload_face_information()
+    app.config['UPLOAD_FOLDER'] = 'abc'
     app.run()
     app.debug = True
     
