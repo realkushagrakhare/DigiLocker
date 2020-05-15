@@ -48,7 +48,7 @@ def login():
         res = backend_login('check.jpg')
         if(res == None):
             return jsonify(status='1')
-        return jsonify(status='0', user=res)
+        return jsonify(status='0', user=res[0], key=res[1])
     return render_template('login.html')
     
 @app.route('/getAllFiles', methods=['GET','POST'])
@@ -64,14 +64,20 @@ def download():
     f=request.form['fname']
     print(f)
     return send_from_directory(directory=os.getcwd()+'\\'+'abc', filename=f)
-    
-    
+   
 @app.route('/upload', methods=['POST'])  
 def upload():  
     if request.method == 'POST':
         print(request.files)
         f = request.files['file']
         f.save('abc'+'/'+secure_filename(f.filename))
+    return jsonify(status='0')
+
+@app.route('/delete', methods=['POST'])	
+def delete():
+    f=request.form['fname']
+    print("Deleting ", f)
+    os.remove("abc/"+f)
     return jsonify(status='0')
 
 def contains_whitespace(str):
@@ -163,6 +169,7 @@ def take_exisitng_photo(image_path, image_name):
 
 def backend_login(image_path):
 	name = None
+	key = None
 	match_index = None
 	logged_in = False
 	timeout = time.time() + 15   # 15 seconds from now
@@ -183,14 +190,15 @@ def backend_login(image_path):
 		if True in matches:
 			match_index = matches.index(True)
 			name = known_face_names[match_index]
+			key = known_face_keys[match_index]
 			print("Login successful for  " + name)
 			logged_in = True
-			return name
+			return (name, key)
 	
 		if(time.time() > timeout):
 			print('Timeout.')
 			return None
-	return name
+	return None
 
 
 if __name__ == '__main__':

@@ -10,7 +10,8 @@
                 <select id="filelist" name="fname">
                     <option>Dropdown for a list of files to select from</option>
                 </select>
-                <input type="button" value="Download now" onclick="alt_download()">
+                <input type="button" value="Download" onclick="alt_download()">
+				<input type="button" value="Delete" onclick="del()">
             </form>
         </div>
         <br><br>
@@ -70,6 +71,14 @@
             }
 			function reload_webpage(){
 				location.reload();
+			}
+			function del(){
+                var form = document.getElementById("form1");
+                var formData = new FormData(form);
+                var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("POST", "/delete");
+				xmlhttp.send(formData);
+				xmlhttp.onload = reload_webpage;
 			}
         </script>
     </body>

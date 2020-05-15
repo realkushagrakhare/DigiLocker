@@ -50,6 +50,7 @@
 						if(responseJson.status == '0')
 						{
 							sessionStorage.setItem('user', responseJson.user);
+							sessionStorage.setItem('key', responseJson.key);
 							console.log(sessionStorage.getItem('user'));
 							//load next page
 						}
