@@ -10,7 +10,7 @@
                 <select id="filelist" name="fname">
                     <option>Dropdown for a list of files to select from</option>
                 </select>
-                <input type="button" value="Download now" onclick="download()">
+                <input type="button" value="Download now" onclick="alt_download()">
             </form>
         </div>
         <br><br>
@@ -32,7 +32,7 @@
                 select.appendChild(el);
             }
             
-            function download(){
+            /*function download(){
                 var form = document.getElementById("form1");
                 var formData = new FormData(form);
                 var xmlhttp = new XMLHttpRequest();
@@ -44,7 +44,21 @@
 				}
                 xmlhttp.open("POST", "/download");
 				xmlhttp.send(formData);
+            }*/
+			function alt_download(){
+                var x = document.getElementById("form1").elements.item(0).value;
+				console.log(x);
+				downloadURI("/static/abc/"+x, x);
             }
+			function downloadURI(uri, name) {
+				 var link = document.createElement("a");
+				 link.download = name;
+				 link.href = uri;
+				 document.body.appendChild(link);
+				 link.click();
+				 document.body.removeChild(link);
+				 delete link;
+			}
             function upload(){
                 var form = document.getElementById("form2");
                 var formData = new FormData(form);
