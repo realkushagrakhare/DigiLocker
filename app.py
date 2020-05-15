@@ -33,7 +33,7 @@ def signup():
         filename = 'check.jpeg'
         with open(filename, 'wb') as f:
             f.write(imgdata)
-        status = backend_signup(request.form['userID'], 'check.jpg')
+        status = backend_signup(request.form['userID'], 'check.jpeg')
         return jsonify(status=status)
     return render_template('signup.html')
 	
@@ -45,39 +45,47 @@ def login():
         filename = 'check.jpeg'
         with open(filename, 'wb') as f:
             f.write(imgdata)
-        res = backend_login('check.jpg')
+        res = backend_login('check.jpeg')
         if(res == None):
             return jsonify(status='1')
+        if(not os.path.exists('static/'+res[0])):
+            os.mkdir('static/'+res[0])
         return jsonify(status='0', user=res[0], key=res[1])
     return render_template('login.html')
     
 @app.route('/getAllFiles', methods=['GET','POST'])
 def get_all_files():
-    files = []
-    for (_,_,f) in os.walk(userpath):
-        for file in f:
-            files.append(file)
-    return render_template('usersite.html',files=files)
+    if request.method == 'POST':
+        userpath =  'static/'+request.form['user']+'/'
+        files = []
+        for (_,_,f) in os.walk(userpath):
+            for file in f:
+                files.append(file)
+        return jsonify(status='0', files=files)
+    return render_template('usersite.html', files=[])
     
 @app.route('/download', methods=['POST'])
 def download():
     f=request.form['fname']
     print(f)
-    return send_from_directory(directory=os.getcwd()+'\\'+'abc', filename=f)
+    return send_from_directory(directory=os.getcwd()+'\\static\\'+'abc', filename=f)
    
 @app.route('/upload', methods=['POST'])  
 def upload():  
-    if request.method == 'POST':
-        print(request.files)
-        f = request.files['file']
-        f.save('abc'+'/'+secure_filename(f.filename))
+    print('Uploading user:', request.form['user'])
+    print(request.files)
+    f = request.files['file']
+    userpath = 'static/'+request.form['user']+'/'
+    f.save(userpath+secure_filename(f.filename))
     return jsonify(status='0')
 
 @app.route('/delete', methods=['POST'])	
 def delete():
+    print('Deleting user:', request.form['user'])
     f=request.form['fname']
     print("Deleting ", f)
-    os.remove("abc/"+f)
+    userpath = 'static/'+request.form['user']+'/'
+    os.remove(userpath+f)
     return jsonify(status='0')
 
 def contains_whitespace(str):

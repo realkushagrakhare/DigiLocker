@@ -51,8 +51,8 @@
 						{
 							sessionStorage.setItem('user', responseJson.user);
 							sessionStorage.setItem('key', responseJson.key);
-							console.log(sessionStorage.getItem('user'));
-							//load next page
+							console.log(sessionStorage.getItem('user') +" logged in");
+							location.href = "/getAllFiles";
 						}
 					}
 				};
