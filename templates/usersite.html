@@ -10,7 +10,8 @@
                 <select id="filelist" name="fname">
                     <option>Dropdown for a list of files to select from</option>
                 </select>
-                <input type="button" value="Download now" onclick="alt_download()">
+                <input type="button" value="Download" onclick="alt_download()">
+				<input type="button" value="Delete" onclick="del()">
             </form>
         </div>
         <br><br>
@@ -22,7 +23,7 @@
         </div>
 
         <script>
-            var select = document.getElementById("filelist");
+            /*var select = document.getElementById("filelist");
             var options = {{ files|tojson }};
             for(var i = 0; i < options.length; i++) {
                 var opt = options[i];
@@ -30,8 +31,36 @@
                 el.textContent = opt;
                 el.value = opt;
                 select.appendChild(el);
-            }
-            
+            }*/
+			
+			function fill_dropdown(){
+				var formData = new FormData();
+				formData.append("user", sessionStorage.getItem('user'));
+				formData.append("key", sessionStorage.getItem('key'));
+				var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					//console.log(this.responseText);
+					if (this.readyState == 4 && this.status == 200) {
+						var responseJson = JSON.parse(this.responseText);
+						if(responseJson.status == '0')
+						{
+							//console.log(responseJson.files);
+							var select = document.getElementById("filelist");
+							var options = responseJson.files;
+							for(var i = 0; i < options.length; i++) {
+								var opt = options[i];
+								var el = document.createElement("option");
+								el.textContent = opt;
+								el.value = opt;
+								select.appendChild(el);
+							}
+						}
+					}
+				};
+                xmlhttp.open("POST", "/getAllFiles");
+				xmlhttp.send(formData);
+			}
+
             /*function download(){
                 var form = document.getElementById("form1");
                 var formData = new FormData(form);
@@ -48,7 +77,7 @@
 			function alt_download(){
                 var x = document.getElementById("form1").elements.item(0).value;
 				console.log(x);
-				downloadURI("/static/abc/"+x, x);
+				downloadURI("/static/" + sessionStorage.getItem('user') + "/" + x, x);
             }
 			function downloadURI(uri, name) {
 				 var link = document.createElement("a");
@@ -62,11 +91,30 @@
             function upload(){
                 var form = document.getElementById("form2");
                 var formData = new FormData(form);
+				formData.append("user", sessionStorage.getItem('user'));
+				formData.append("key", sessionStorage.getItem('key'));
 				//console.log(form);
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.open("POST", "/upload");
 				xmlhttp.send(formData);
+				xmlhttp.onload = reload_webpage;
             }
+			function reload_webpage(){
+				location.reload();
+			}
+			function del(){
+                var form = document.getElementById("form1");
+                var formData = new FormData(form);
+				formData.append("user", sessionStorage.getItem('user'));
+				formData.append("key", sessionStorage.getItem('key'));
+                var xmlhttp = new XMLHttpRequest();
+				xmlhttp.open("POST", "/delete");
+				xmlhttp.send(formData);
+				xmlhttp.onload = reload_webpage;
+			}
+			
+			document.title = sessionStorage.getItem('user') + " Site | DigiLocker";
+			fill_dropdown();
         </script>
     </body>
 </html>
