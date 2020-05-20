@@ -5,23 +5,22 @@
 <title>Site | DigiLocker</title>
 </head>
     <body>
-        <div id="download-section">
+        <div id="uploadsection">
+            <form method = "post" enctype="multipart/form-data" id="form2">  
+                <input type="file" name="file"><br>  
+                <input type = "button" value="Add to DigiLocker" onclick="upload()">  
+            </form>
+        </div>
+		<br><br>
+		<div id="download-section">
             <form method="POST" enctype="multipart/form-data" id="form1">
                 <select id="filelist" name="fname">
                     <option>Dropdown for a list of files to select from</option>
-                </select>
+                </select><br>
                 <input type="button" value="Download" onclick="alt_download()">
-				<input type="button" value="Delete" onclick="del()">
+				<input type="button" value="Remove from DigiLocker" onclick="del()">
             </form>
         </div>
-        <br><br>
-        <div id="uploadsection">
-            <form method = "post" enctype="multipart/form-data" id="form2">  
-                <input type="file" name="file">  
-                <input type = "button" value="Upload" onclick="upload()">  
-            </form>
-        </div>
-
         <script>
             /*var select = document.getElementById("filelist");
             var options = {{ files|tojson }};
@@ -113,7 +112,7 @@
 				xmlhttp.onload = reload_webpage;
 			}
 			
-			document.title = sessionStorage.getItem('user') + " Site | DigiLocker";
+			document.title = sessionStorage.getItem('user') + "'s DigiLocker";
 			fill_dropdown();
         </script>
     </body>

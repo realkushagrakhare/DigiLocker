@@ -3,16 +3,60 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <title>Signup | DigiLocker</title>
+<style>
+	body{
+	  text-align: center; 
+	  background-color: #3d3d3d;
+  	}
+  	h1{
+		font-family: monospace;
+		padding-top: 4vh;
+		padding-bottom: 5vh;
+		font-size: 2vw;
+		color: seashell;
+  	}
+  	#myForm{
+		padding-bottom: 2vh;
+	}
+	#user {
+		width: 50%;
+		padding: 1.5vh;
+	}
+	#button {
+		width: 20%;
+		padding: 1.5vh;
+		color: green;
+		font-weight: bold;
+		font-size: 2.5vh;
+		font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+	}
+	#button:hover {
+		width: 19%;
+		padding: 1.5vh;
+		color: white;
+		background-color: green;
+	}
+	#my_camera{
+		margin-right: auto;
+		margin-left: auto;
+		display: block;
+	}
+	#results{
+		margin-right: auto;
+		margin-left: auto;
+		display: block;
+	}
+</style>
 </head>
 <body>
-	
+	<h1>Sign-Up</h1>
     <form method="POST" enctype="multipart/form-data" id="myForm">
-		<label for="username">enter userID:</label>
-		<input type="text" id="username" name="userID" placeholder="  without space .." required>
-		<input type="button" value="Next" onclick="upload()">
+		<input type="text" id="user" name="userID" placeholder="Enter UserID" required>
+		<br><br>
+		<input type="button" id="button" value="Next" onclick="upload()">
 	</form>
 	<br><br>
-	<div id="my_camera"></div>
+	<div id="my_camera"></div><br>
 	<div id="results"></div>
 	
 	<script type="text/javascript" src="static/webcam.js"></script>
