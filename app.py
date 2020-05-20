@@ -11,6 +11,7 @@ from encryption import Encryptor
 import win32api, win32con
 
 app = Flask(__name__)
+count = 0
 
 master_key = b'[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb\xc4\x94\x9d(\x9e'
 enc = Encryptor(master_key)
@@ -29,27 +30,33 @@ def index(name=None):
 @app.route('/signup', methods=['GET','POST'])
 def signup():
     if request.method == 'POST':
+        global count
+        count += 1
         print("Current New User:", request.form['userID'])
         if(request.form['userID'] in known_face_names):
             return jsonify(status='4')
-        str=request.form['file'][23:]
-        imgdata = base64.b64decode(str)
-        filename = 'check.jpeg'
+        fname=request.form['file'][23:]
+        imgdata = base64.b64decode(fname)
+        filename = str(count)+".jpeg"#'check.jpeg'
         with open(filename, 'wb') as f:
             f.write(imgdata)
-        status = backend_signup(request.form['userID'], 'check.jpeg')
+        status = backend_signup(request.form['userID'], filename)
+        os.remove(filename)
         return jsonify(status=status)
     return render_template('signup.html')
 	
 @app.route('/login', methods=['GET','POST'])
 def login():
     if request.method == 'POST':
-        str=request.form['file'][23:]
-        imgdata = base64.b64decode(str)
-        filename = 'check.jpeg'
+        global count
+        count += 1
+        fname=request.form['file'][23:]
+        imgdata = base64.b64decode(fname)
+        filename = str(count)+".jpeg"#'check.jpeg'
         with open(filename, 'wb') as f:
             f.write(imgdata)
-        res = backend_login('check.jpeg')
+        res = backend_login(filename)
+        os.remove(filename)
         if(res == None):
             return jsonify(status='1')
         if(not os.path.exists('static/'+res[0])):
