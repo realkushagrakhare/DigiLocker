@@ -76,7 +76,7 @@
 			function alt_download(){
                 var x = document.getElementById("form1").elements.item(0).value;
 				console.log(x);
-				downloadURI("/static/" + sessionStorage.getItem('user') + "/" + x, x);
+				decrypt(x);
             }
 			function downloadURI(uri, name) {
 				 var link = document.createElement("a");
@@ -86,6 +86,37 @@
 				 link.click();
 				 document.body.removeChild(link);
 				 delete link;
+			}
+			function decrypt(name) {
+                var formData = new FormData();
+				formData.append("user", sessionStorage.getItem('user'));
+				formData.append("key", sessionStorage.getItem('key'));
+				formData.append("fname", name);
+				//console.log(form);
+                var xmlhttp = new XMLHttpRequest();
+				xmlhttp.onreadystatechange = function() {
+					//console.log(this.responseText);
+					if (this.readyState == 4 && this.status == 200) {
+						var responseJson = JSON.parse(this.responseText);
+						if(responseJson.status == '0')
+						{
+							downloadURI("/static/" + sessionStorage.getItem('user') + "/" + name, name);
+							encrypt(name);
+						}
+					}
+				}
+                xmlhttp.open("POST", "/decrypt");
+				xmlhttp.send(formData);
+			}
+			function encrypt(name) {
+                var formData = new FormData();
+				formData.append("user", sessionStorage.getItem('user'));
+				formData.append("key", sessionStorage.getItem('key'));
+				formData.append("fname", name);
+				//console.log(form);
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.open("POST", "/encrypt");
+				xmlhttp.send(formData);
 			}
             function upload(){
                 var form = document.getElementById("form2");

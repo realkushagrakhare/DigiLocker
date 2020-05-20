@@ -7,8 +7,13 @@ from Crypto import Random
 import time
 import string
 from werkzeug.utils import secure_filename
+from encryption import Encryptor
+import win32api, win32con
 
 app = Flask(__name__)
+
+master_key = b'[EX\xc8\xd5\xbfI{\xa2$\x05(\xd5\x18\xbf\xc0\x85)\x10nc\x94\x02)j\xdf\xcb\xc4\x94\x9d(\x9e'
+enc = Encryptor(master_key)
 
 userpath = 'abc'
 files = []
@@ -60,15 +65,15 @@ def get_all_files():
         files = []
         for (_,_,f) in os.walk(userpath):
             for file in f:
-                files.append(file)
+                files.append(file[:-4])
         return jsonify(status='0', files=files)
     return render_template('usersite.html', files=[])
     
 @app.route('/download', methods=['POST'])
 def download():
-    f=request.form['fname']
+    f=request.form['fname']+".enc"
     print(f)
-    return send_from_directory(directory=os.getcwd()+'\\static\\'+'abc', filename=f)
+    return send_from_directory(directory=os.getcwd()+'\\static\\'+request.form['user'], filename=f)
    
 @app.route('/upload', methods=['POST'])  
 def upload():  
@@ -77,6 +82,8 @@ def upload():
     f = request.files['file']
     userpath = 'static/'+request.form['user']+'/'
     f.save(userpath+secure_filename(f.filename))
+    print(len(request.form['key']))
+    enc.encrypt_file(userpath+f.filename, request.form['key'])
     return jsonify(status='0')
 
 @app.route('/delete', methods=['POST'])	
@@ -85,7 +92,21 @@ def delete():
     f=request.form['fname']
     print("Deleting ", f)
     userpath = 'static/'+request.form['user']+'/'
-    os.remove(userpath+f)
+    os.remove(userpath+f+".enc")
+    return jsonify(status='0')
+
+@app.route('/encrypt', methods=['POST'])
+def encrypt():
+    f=request.form['fname']
+    userpath = 'static/'+request.form['user']+'/'
+    enc.encrypt_file(userpath+f, request.form['key'])
+    return jsonify(status='0')
+
+@app.route('/decrypt', methods=['POST'])
+def decrypt():
+    f=request.form['fname']
+    userpath = 'static/'+request.form['user']+'/'
+    enc.decrypt_file(userpath+f+".enc", request.form['key'])
     return jsonify(status='0')
 
 def contains_whitespace(str):
@@ -173,6 +194,7 @@ def take_exisitng_photo(image_path, image_name):
 	
 	cv2.imwrite(image_name + ".jpg", image)
 	current_face_encodings[0] = face_encodings[0]
+	win32api.SetFileAttributes(image_name + ".jpg", win32con.FILE_ATTRIBUTE_HIDDEN)
 	return image_name + ".jpg"
 
 def backend_login(image_path):
