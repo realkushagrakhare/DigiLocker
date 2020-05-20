@@ -1,14 +1,80 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Site | DigiLocker</title>
+<style>
+	a, a:visited{
+	  font-family: monospace ;
+      font-size: 2vw;
+      color: #f00048;
+      text-decoration: none;
+      cursor: pointer;
+  	}
+  	a:hover{
+      font-size: 2vw;
+      color:white;
+      text-decoration: none;
+ 	 }
+	body{
+	  text-align: center; 
+	  background-color: #292929;
+	  font-family: monospace;
+	}
+	#uploadsection, #downloadsection {
+		color: white;
+		padding: 15vh;
+	}
+	#ch-btn {
+		font-size: 2vw;
+		width: 50%;
+		padding: 5vh;
+	}
+	#ubtn {
+		width: 50%;
+		padding: 1.5vh;
+		color: white;
+		font-weight: bold;
+		font-size: 2.5vh;
+		background-color: #292929;
+	}
+	#ubtn:hover {
+		width: 50%;
+		padding: 1.5vh;
+		color: #f00048;
+	}
+	#btn {
+		width: 20%;
+		padding: 1.5vh;
+		color: white;
+		font-weight: bold;
+		font-size: 2.5vh;
+		background-color: #292929;
+	}
+	#btn:hover {
+		width: 20%;
+		padding: 1.5vh;
+		color: #f00048;
+	}
+	#filelist {
+		width: 40%;
+		padding: 1.5vh;
+		color: white;
+		font-weight: bold;
+		font-size: 2.5vh;
+		background-color: #292929;
+	}
+	#filelist:hover {
+		color: greenyellow;
+	}
+</style>
 </head>
     <body>
+		<a href="/">Sign-out</a>
         <div id="uploadsection">
             <form method = "post" enctype="multipart/form-data" id="form2">  
-                <input type="file" name="file"><br>  
-                <input type = "button" value="Add to DigiLocker" onclick="upload()">  
+                <input type="file" id="ch-btn" name="file"><br>  
+                <input type = "button" id="ubtn" value="Add to repository" onclick="upload()">  
             </form>
         </div>
 		<br><br>
@@ -16,9 +82,9 @@
             <form method="POST" enctype="multipart/form-data" id="form1">
                 <select id="filelist" name="fname">
                     <option>Dropdown for a list of files to select from</option>
-                </select><br>
-                <input type="button" value="Download" onclick="alt_download()">
-				<input type="button" value="Remove from DigiLocker" onclick="del()">
+                </select>
+                <br><br><br><input type="button" id="btn" value="Download" onclick="alt_download()">
+				<input type="button" id="btn" value="Delete" onclick="del()">
             </form>
         </div>
         <script>
