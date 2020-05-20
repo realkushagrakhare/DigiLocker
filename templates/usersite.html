@@ -27,11 +27,11 @@
 	}
 	#ch-btn {
 		font-size: 2vw;
-		width: 50%;
+		width: 48%;
 		padding: 5vh;
 	}
 	#ubtn {
-		width: 50%;
+		width: 48%;
 		padding: 1.5vh;
 		color: white;
 		font-weight: bold;
@@ -39,8 +39,7 @@
 		background-color: #292929;
 	}
 	#ubtn:hover {
-		width: 50%;
-		padding: 1.5vh;
+		width: 48%;
 		color: #f00048;
 	}
 	#btn {
@@ -53,7 +52,6 @@
 	}
 	#btn:hover {
 		width: 20%;
-		padding: 1.5vh;
 		color: #f00048;
 	}
 	#filelist {
@@ -70,10 +68,10 @@
 </style>
 </head>
     <body>
-		<input type="button" id="btn" value="Log out" onclick="logout()">
+		<a onclick="logout()">Log-out</a>
         <div id="uploadsection">
             <form method = "post" enctype="multipart/form-data" id="form2">  
-                <input type="file" id="ch-btn" name="file"><br>  
+                <input type="file" id="ch-btn" name="file"> 
                 <input type = "button" id="ubtn" value="Add to repository" onclick="upload()">  
             </form>
         </div>
