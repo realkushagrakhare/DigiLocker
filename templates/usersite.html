@@ -2,25 +2,26 @@
 <html lang="en">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Site | DigiLocker</title>
+<title>Site | digiLocker</title>
 <style>
+	body{
+		text-align: center; 
+		background-color: #292929;
+		font-family: monospace;
+	}
 	a, a:visited{
-	  font-family: monospace ;
-      font-size: 2vw;
-      color: #f00048;
-      text-decoration: none;
-      cursor: pointer;
+		text-align: left;
+		font-family: monospace ;
+		font-size: 1.5vw;
+		color: #f00048;
+		text-decoration: none;
+		cursor: pointer;
   	}
   	a:hover{
-      font-size: 2vw;
-      color:white;
-      text-decoration: none;
+		font-size: 1.5vw;
+		color:white;
+		text-decoration: none;
  	 }
-	body{
-	  text-align: center; 
-	  background-color: #292929;
-	  font-family: monospace;
-	}
 	#uploadsection, #downloadsection {
 		color: white;
 		padding: 15vh;
@@ -217,7 +218,7 @@
 			if(sessionStorage.getItem('user') === null){
 				location.href = "/";
 			}
-			document.title = sessionStorage.getItem('user') + "'s DigiLocker";
+			document.title = sessionStorage.getItem('user') + "'s digiLocker";
 			fill_dropdown();
         </script>
     </body>
